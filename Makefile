@@ -1,14 +1,19 @@
 CC = gcc
-OBJ = linux_hw.o oled.o sensirion_common.o sht3x_example_usage.o main.o oled_display.o sht3x.o
-CPPFLAGS = -Icommon -Isht3x -Ioled
-VPATH = common:sht3x:oled
+CFLAGS = -g
 
-bbb: $(OBJ)
-	$(CC) $(CPPFLAGS) -o $@ $(OBJ)
+INCLUDES = $(wildcard ./*.h ./common/*.h ./sht3x/*.h ./oled/*.h)
+SOURCES = $(wildcard ./*.c ./common/*.c ./sht3x/*.c ./oled/*.c)
+INCLUDE_DIRS = -I./common -I./sht3x -I./oled
 
-%.o: %.c
-	$(CC) $(CPPFLAGS) -c $<
+TARGET = bbb
+OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
+
+$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(OBJECTS): %.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@ $(INCLUDE_DIRS)
 
 .PHONY: clean
 clean:
-	rm -f bbb *.o */*.o
+	rm -rf $(TARGET) $(OBJECTS)
