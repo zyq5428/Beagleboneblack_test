@@ -17,22 +17,40 @@ int sht3x_init(void) {
     }
     	printf("SHT sensor probing successful\n");
 
-    while (1) {
+    do {
         int32_t temperature, humidity;
         /* Measure temperature and relative humidity and store into variables
          * temperature, humidity (each output multiplied by 1000).
          */
         int8_t ret = sht3x_measure_blocking_read(&temperature, &humidity);
         if (ret == STATUS_OK) {
+            printf("temperature value is: %d , "
+                    "humidity value is: %d \n",
+                    temperature,
+                    humidity); 
             printf("measured temperature: %0.2f degreeCelsius, "
-                      "measured humidity: %0.2f percentRH\n",
-                      temperature / 1000.0f,
-                      humidity / 1000.0f); 
+                    "measured humidity: %0.2f percentRH\n",
+                    temperature / 1000.0f,
+                    humidity / 1000.0f); 
         } else {
             printf("error reading measurement\n");
         }
-	
-	sleep(1);
+    } while (0);
+
+    return 0;
+}
+
+int sht3x_detect(int32_t *temperature, int32_t *humidity)
+{
+    int8_t ret = sht3x_measure_blocking_read(temperature, humidity);
+    if (ret == STATUS_OK) {
+        return 0;
+/*         printf("measured temperature: %0.2f degreeCelsius, "
+                    "measured humidity: %0.2f percentRH\n",
+                    *temperature / 1000.0f,
+                    *humidity / 1000.0f);  */
+    } else {
+        printf("error reading measurement\n");
     }
     return 0;
 }
