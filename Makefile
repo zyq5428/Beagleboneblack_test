@@ -1,6 +1,6 @@
 CROSS_COMPILE 	?= 
 TARGET		  	?= bbb
-CFLAGS			?= -g
+CFLAGS			?= -g -lpthread
 
 CC 				:= $(CROSS_COMPILE)gcc
 LD				:= $(CROSS_COMPILE)ld
